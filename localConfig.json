@@ -175,34 +175,41 @@
                   }
               }
             }, {
-      				"name": "Measure",
-              "cfg": {
-                "showResults": true,
-                "lineGlyph": "1-measure-lenght",
-                "areaGlyph": "1-measure-area",
-                "bearingGlyph": "1-bearing",
-                "useButtonGroup": false,
-                "uom": {
-                    "area": {
-                        "label": "square ft",
-                        "unit": "sqft"
-                    },
-                    "length": {
-                        "label": "ft",
-                        "unit": "ft"
+        				"name": "Measure",
+                "cfg":{
+                  "showResults": false,
+                  "lineGlyph": "1-measure-lenght",
+                  "areaGlyph": "1-measure-area",
+                  "bearingGlyph": "1-bearing",
+                  "useButtonGroup": false
+                },
+        				"override": {
+        					"DrawerMenu": {
+        						"glyph": "1-stilo",
+                    "buttonConfig": {
+                      "buttonClassName": "square-button no-border"
                     }
-                }
-              },
-      				"override": {
-      					"DrawerMenu": {
-      						"glyph": "1-stilo",
-                  "buttonConfig": {
-                    "buttonClassName": "square-button no-border"
+        					}
+        				}
+        		}, {
+        				"name": "MeasureResults",
+                "cfg":{
+                  "closeGlyph": "1-close",
+                  "withPanelAsContainer": false,
+                  "uom": {
+                      "area": {
+                          "label": "square ft",
+                          "unit": "sqft"
+                      },
+                      "length": {
+                          "label": "ft",
+                          "unit": "ft"
+                      }
                   }
-      					}
-      				}
+                }
         		},
             {
+              "name": "Print",
               "cfg": {
                   "closeGlyph": "1-close",
                   "mapPreviewOptions": {
@@ -222,8 +229,7 @@
                   "syncMapPreview": true,
                   "useFixedScales": false,
                   "withPanelAsContainer": false
-              },
-              "name": "Print"
+              }
             },
             {
               "cfg": {
