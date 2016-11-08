@@ -21,6 +21,8 @@ const ConfigUtils = require('../MapStore2/web/client/utils/ConfigUtils');
 const LocaleUtils = require('../MapStore2/web/client/utils/LocaleUtils');
 const PluginsUtils = require('../MapStore2/web/client/utils/PluginsUtils');
 
+require('react-select/dist/react-select.css');
+
 LocaleUtils.setSupportedLocales({
     "en": {
        code: "en-US",

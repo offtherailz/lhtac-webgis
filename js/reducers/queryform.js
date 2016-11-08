@@ -134,7 +134,7 @@ function queryform(state, action) {
                         let f = field;
                         if (action.id === field.id) {
                             f = {...field, active: true, checked: true};
-                        }else if (action.exclude.includes(field.id)) {
+                        }else if (action.exclude.indexOf(field.id) !== -1) {
                             f = {
                                 ...field,
                                 error: null,

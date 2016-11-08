@@ -69,7 +69,7 @@ const SpatialFilter = React.createClass({
                     zone.valueField.split('.').forEach(part => {
                         valueField2 = valueField2 ? valueField2[part] : null;
                     });
-                    return value.includes(valueField2);
+                    return value.indexOf(valueField2) !== -1;
                 });
             }
             if (zone && zone.multivalue) {
