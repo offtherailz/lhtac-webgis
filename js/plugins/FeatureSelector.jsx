@@ -10,7 +10,7 @@ const React = require('react');
 const {connect} = require('react-redux');
 
 const {Glyphicon, Alert} = require('react-bootstrap');
-const FeatureSelectorUtils = require('../utils/FeatureSelectorUtils');
+
 const FilterUtils = require('../../MapStore2/web/client/utils/FilterUtils');
 
 const Spinner = require('react-spinkit');
@@ -100,32 +100,22 @@ const FeatureSelector = React.createClass({
             }
         }
 
-        if (nextProps.geometry && nextProps.geometryStatus === "created" && nextProps.queryform.spatialField && nextProps.queryform.spatialField.geometry) {
+        if (nextProps.geometry && nextProps.geometryStatus === "created" && nextProps.queryform.spatialField) {
 
             let spatialField = nextProps.queryform.spatialField;
-            // Check SRS & Type
-            let sFieldSRS = spatialField.geometry && spatialField.geometry.projection || "EPSG:4326";
-            let sFieldType = spatialField.geometry.type || "Polygon";
             // prevGeometry is the area selected in the areaFilter and changes only over there
-            let prevGeometry = {
-                coordinates: spatialField.geometry.coordinates,
-                projection: sFieldSRS,
-                type: sFieldType
-            };
 
-            // this intersetions refers to the geometry given by the areaFilter and the last area selected with the drawing tool.
-            // in the featureSelector reducer the state is updated doing a xor beetwen the old selected features and the new ones
-            // implementing the toggle of the features (selected or highlghted ones become unselected and unselected ones become selected)
-            let intersection = FeatureSelectorUtils.intersectPolygons(prevGeometry, nextProps.geometry);
 
-            if (intersection !== undefined) {
+            if (nextProps.queryform.spatialField.extent) {
                 let newSpatialFilter = {
                     attribute: spatialField.attribute,
                     method: nextProps.drawMethod,
                     operation: spatialField.operation,
-                    geometry: intersection
+                    geometry: nextProps.geometry
                 };
                 let filterOpt = {spatialField: newSpatialFilter};
+
+                filterOpt.crossLayerFilter = this.createCrossLayerFilterObj(spatialField.attribute, nextProps.queryform.spatialField);
                 if (this.props.advancedFilterStatus && this.props.queryform.simpleFilterFields && this.props.queryform.simpleFilterFields.length > 0) {
                     filterOpt.simpleFilterFields = this.props.queryform.simpleFilterFields;
                 }
@@ -196,6 +186,49 @@ const FeatureSelector = React.createClass({
     },
     handleKeyUp() {
         window.setTimeout(() => {this.addKey = false; }, 100);
+    },
+    createCrossLayerFilterObj(geomAttribute, spatialField) {
+
+        let zone;
+        let attribute;
+        let filter = null;
+        let cqlFilter = "INCLUDE";
+        // Get the latest zone with value in the array
+        for (let i = spatialField.zoneFields.length - 1; i >= 0; i--) {
+            if (spatialField.zoneFields[i].value && spatialField.zoneFields[i].active) {
+                zone = spatialField.zoneFields[i];
+                break;
+            }
+        }
+        if (zone) {
+            // Get the attribute name (check for dotted notation)
+            attribute = zone.valueField.indexOf(".") !== -1 ? zone.valueField.split('.')[zone.valueField.split('.').length - 1] : zone.valueField;
+            if (zone.values.length !== zone.value.length) {
+                // select only chosen ones
+                cqlFilter = attribute;
+                if (zone.value instanceof Array) {
+                    cqlFilter += " IN (";
+                    cqlFilter += zone.value.map((value) => "'" + value + "'").join(",");
+                    cqlFilter += ")";
+                } else {
+                    cqlFilter += " = '" + zone.value + "'";
+                }
+            }
+            // Prepare the cql cross layer filter
+            filter = {
+                attribute: geomAttribute,
+                operation: spatialField.operation,
+                collectGeometries: {
+                    queryCollection: {
+                        typeName: zone.typeName,
+                        geometryName: zone.geometryName,
+                        cqlFilter
+                    }
+                }
+            };
+
+        }
+        return filter;
     }
 });
 

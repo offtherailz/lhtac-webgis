@@ -7,7 +7,7 @@
  */
 const msQueryform = require('../../MapStore2/web/client/reducers/queryform');
 const queryFormConfig = require('../../queryFormConfig');
-const {bbox} = require('turf');
+const {bbox, bboxPolygon} = require('turf');
 const assign = require('object-assign');
 
 const CLEAN_GEOMETRY = 'CLEAN_GEOMETRY';
@@ -149,23 +149,17 @@ function queryform(state, action) {
         case TASK_SUCCESS: {
             let name = action.name;
             let zoneId = parseInt(name.substring('zoneChange'.length), 10);
-            let feature = action.result;
             let value;
             let geometry;
             const zoneFields = state.spatialField.zoneFields.map((field) => {
                 if (field.id === zoneId) {
                     value = field.multivalue ? action.actionPayload.value : action.actionPayload.value[0];
-                    if (feature) {
-                        let f = feature;
-                        let geometryName = action.actionPayload.featureParams.geometry_name;
-                        geometry = {coordinates: f.geometry.coordinates, geometryName: geometryName, geometryType: f.geometry.type};
-                    }
 
                     return {
                             ...field,
                             value: value && value.length > 0 ? value : null,
                             open: false,
-                            geometryName: geometry ? geometry.geometryName : null
+                            geometryName: geometry ? geometry.geometryName : field.geometry_name
                         };
                 }
                 if (field.dependson && zoneId === field.dependson.id) {
@@ -191,19 +185,15 @@ function queryform(state, action) {
                 }
                 return field;
             });
-
+            // create the extent that contains all the bboxes
             let extent = bbox({
                 type: "FeatureCollection",
-                features: action.actionPayload.features
+                features: action.actionPayload.features.map( feature => bboxPolygon(feature.properties.bbox))
             });
 
             return {...state, spatialField: {...state.spatialField,
                 zoneFields: zoneFields,
-                geometry: extent && geometry ? {
-                    extent: extent,
-                    type: geometry.geometryType,
-                    coordinates: geometry.coordinates
-                } : null,
+                extent,
                 buttonReset: false
             }};
 

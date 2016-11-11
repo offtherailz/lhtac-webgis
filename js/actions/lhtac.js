@@ -23,7 +23,6 @@ const {featureSelectorError} = require("../actions/featureselector");
 const {onResetThisZone} = require("../actions/queryform");
 
 const FileUtils = require('../../MapStore2/web/client/utils/FileUtils');
-const ZoneUtils = require('../utils/ZoneUtils');
 
 function statsLoading(status) {
     return {
@@ -134,7 +133,7 @@ function zoneSelected(zone, value) {
                 "value": value.value,
                 "features": value.feature
             };
-            dispatch(startTask(ZoneUtils.geometryUnion, value.feature, 'zoneChange' + zone.id, actionPayload));
+            dispatch(startTask((v, c) => c(v), value.feature, 'zoneChange' + zone.id, actionPayload));
             dispatch(setActiveZone(zone.id, zone.exclude));
         }
     };
