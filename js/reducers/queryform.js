@@ -12,7 +12,7 @@ const assign = require('object-assign');
 
 const CLEAN_GEOMETRY = 'CLEAN_GEOMETRY';
 const CLEAN_ZONE = 'CLEAN_ZONE';
-const TASK_SUCCESS = 'TASK_SUCCESS';
+const ZONE_CHANGE = 'ZONE_CHANGE';
 const ON_RESET_THIS_ZONE = 'ON_RESET_THIS_ZONE';
 
 function shouldReset(aId, dId, zones) {
@@ -146,14 +146,13 @@ function queryform(state, action) {
                     }
                 });
         }
-        case TASK_SUCCESS: {
-            let name = action.name;
-            let zoneId = parseInt(name.substring('zoneChange'.length), 10);
+        case ZONE_CHANGE: {
+            let zoneId = action.id;
             let value;
             let geometry;
             const zoneFields = state.spatialField.zoneFields.map((field) => {
                 if (field.id === zoneId) {
-                    value = field.multivalue ? action.actionPayload.value : action.actionPayload.value[0];
+                    value = field.multivalue ? action.value : action.value.value[0];
 
                     return {
                             ...field,
@@ -188,7 +187,7 @@ function queryform(state, action) {
             // create the extent that contains all the bboxes
             let extent = bbox({
                 type: "FeatureCollection",
-                features: action.actionPayload.features.map( feature => bboxPolygon(feature.properties.bbox))
+                features: action.features.map( feature => bboxPolygon(feature.properties.bbox))
             });
 
             return {...state, spatialField: {...state.spatialField,
