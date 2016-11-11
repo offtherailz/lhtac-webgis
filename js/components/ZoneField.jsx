@@ -159,7 +159,7 @@ const ZoneField = React.createClass({
         const filter = FilterUtils.toOGCFilter(this.props.typeName, filterObj, this.props.wfs, this.props.sort || {
             sortBy: this.props.searchAttribute,
             sortOrder: "ASC"
-        });
+        }, null, null, [this.props.valueField.split(".").pop(), this.props.textField.split(".").pop()]);
 
         return filter;
     },
