@@ -371,6 +371,9 @@
         ]
     },
     "printUrl": "http://demo.geo-solutions.it/geoserver/pdf/info.json",
-    "proxyUrl": "/lhtac-webgis/proxy/?url=",
+    "proxyUrl": {
+      "useCORS": ["http://demo.geo-solutions.it/geoserver/"],
+      "url": "/lhtac-webgis/proxy/?url="
+    },
     "translationsPath": "translations"
 }
