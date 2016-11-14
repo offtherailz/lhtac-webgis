@@ -34,6 +34,7 @@ const queryFormConfig = {
                     sortBy: "ITD_Dist_n",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [4, 5, 6]
             }, {
                 id: 4,
@@ -54,6 +55,7 @@ const queryFormConfig = {
                     sortBy: "short_name",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 5, 6]
             }, {
                 id: 5,
@@ -74,6 +76,7 @@ const queryFormConfig = {
                     sortBy: "short_name",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 4, 6]
             },
             {
@@ -95,6 +98,7 @@ const queryFormConfig = {
                     sortBy: "name2",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 4, 5]
             }]
         }
@@ -133,6 +137,7 @@ const queryFormConfig = {
                     sortBy: "ITD_Dist_n",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [4, 5, 6]
             }, {
                 id: 4,
@@ -153,6 +158,7 @@ const queryFormConfig = {
                     sortBy: "short_name",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 5, 6]
             }, {
                 id: 5,
@@ -173,6 +179,7 @@ const queryFormConfig = {
                     sortBy: "short_name",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 4, 6]
             },
             {
@@ -194,6 +201,7 @@ const queryFormConfig = {
                     sortBy: "name2",
                     sortOrder: "ASC"
                 },
+                geometry_name: "the_geom",
                 exclude: [3, 4, 5]
             }]
         }

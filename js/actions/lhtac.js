@@ -15,15 +15,15 @@ const CHANGE_DOWNLOAD_FORMAT = 'CHANGE_DOWNLOAD_FORMAT';
 const CLEAN_GEOMETRY = 'CLEAN_GEOMETRY';
 const CLEAN_ZONE = 'CLEAN_ZONE';
 const LOADING_SELECT_ALL = 'LOADING_SELECT_ALL';
+const ZONE_CHANGE = 'ZONE_CHANGE';
 
 const {changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
-const {startTask} = require('../../MapStore2/web/client/actions/tasks');
+
 const {zoneSearchError, zoneFilter, zoneSearch} = require('../../MapStore2/web/client/actions/queryform');
 const {featureSelectorError} = require("../actions/featureselector");
 const {onResetThisZone} = require("../actions/queryform");
 
 const FileUtils = require('../../MapStore2/web/client/utils/FileUtils');
-const ZoneUtils = require('../utils/ZoneUtils');
 
 function statsLoading(status) {
     return {
@@ -115,7 +115,15 @@ function cleanZone(zoneId) {
         zoneId
     };
 }
+function zoneChange(id, features, value) {
+    return {
+        type: ZONE_CHANGE,
+        id,
+        features,
+        value
 
+    };
+}
 function zoneSelected(zone, value) {
     return (dispatch) => {
         // clean previous geometry
@@ -129,12 +137,8 @@ function zoneSelected(zone, value) {
         // if there is a value in the zoneField update the geometry
         if (value && value.value && value.value.length > 0 &&
             value.feature && value.feature.length > 0) {
-            let actionPayload = {
-                "featureParams": value.feature[0],
-                "value": value.value,
-                "features": value.feature
-            };
-            dispatch(startTask(ZoneUtils.geometryUnion, value.feature, 'zoneChange' + zone.id, actionPayload));
+
+            dispatch(zoneChange(zone.id, value.feature, value.value));
             dispatch(setActiveZone(zone.id, zone.exclude));
         }
     };

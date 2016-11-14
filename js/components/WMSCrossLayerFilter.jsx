@@ -21,6 +21,7 @@ const WMSCrossLayerFilter = React.createClass({
     propTypes: {
         zoomArgs: React.PropTypes.array,
         params: React.PropTypes.object,
+        extent: React.PropTypes.object,
         spatialField: React.PropTypes.object,
         toolbarEnabled: React.PropTypes.bool,
         mapConfig: React.PropTypes.object,
@@ -36,6 +37,7 @@ const WMSCrossLayerFilter = React.createClass({
         return {
             params: {},
             mapConfig: {},
+            extent: null,
             spatialField: {},
             toolbarEnabled: true,
             showGeneratedFilter: false,
@@ -55,7 +57,7 @@ const WMSCrossLayerFilter = React.createClass({
         if (nextProps.activeLayer.id !== this.props.activeLayer.id) {
             this.props.actions.changeZoomArgs(null);
         }
-        if (nextProps.spatialField.geometry !== this.props.spatialField.geometry) {
+        if (nextProps.spatialField.extent !== this.props.spatialField.extent) {
             for (let i = 0; i < nextProps.spatialField.zoneFields.length; i++ ) {
                 let z = nextProps.spatialField.zoneFields[i];
                 if (z.active === true && z.value !== null) {
@@ -128,8 +130,8 @@ const WMSCrossLayerFilter = React.createClass({
             }
 
             // Zoom to the selected geometry
-            if (props.spatialField.geometry && props.spatialField.geometry.extent) {
-                const bbox = props.spatialField.geometry.extent;
+            if (props.spatialField.extent && props.spatialField.extent) {
+                const bbox = props.spatialField.extent;
                 const mapSize = props.mapConfig.present.size;
 
                 const newZoom = mapUtils.getZoomForExtent(CoordinatesUtils.reprojectBbox(bbox, "EPSG:4326", props.mapConfig.present.projection), mapSize, 0, 21, null);
