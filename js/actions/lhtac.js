@@ -215,7 +215,7 @@ function downloadSelectedFeatures(url, filter) {
             let contentType = response.headers["content-type"];
             FileUtils.download(response.data, fileName, contentType);
         }).catch((e) => {
-            dispatch(featureSelectorError("Error during wfs request " + e.statusText));
+            dispatch(featureSelectorError("Error during wfs request " + (e.statusText || e.message || e.code)));
         });
     };
 }

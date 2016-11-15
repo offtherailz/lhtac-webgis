@@ -52,8 +52,15 @@ function updateHighlightedFeatures(state, config, dispatch) {
         dispatch(updateHighlighted(newHighligthed, "update"));
     }
 }
-
-function loadFeatures(url, filter, add) {
+function dispatchFeaturesLoaded(reqId, add, max, state, config, dispatch) {
+    if (config.totalFeatures && config.totalFeatures > max) {
+        dispatch(featureSelectorError(`Too Many features selected (${config.totalFeatures}). Please select ${max} features or less`));
+    } else {
+        dispatch(featuresLoaded(config.features, reqId, add));
+        updateHighlightedFeatures(state, config, dispatch);
+    }
+}
+function loadFeatures(url, filter, add, max) {
     const reqId = uuid.v1();
     return (dispatch, getState) => {
         dispatch(newGetFeatureRequest(reqId, filter));
@@ -66,17 +73,16 @@ function loadFeatures(url, filter, add) {
             if (typeof config !== "object") {
                 try {
                     config = JSON.parse(config);
-                    dispatch(featuresLoaded(config.features, reqId, add));
-                    updateHighlightedFeatures(state, config, dispatch);
+                    dispatchFeaturesLoaded(reqId, add, max, state, config, dispatch);
+
                 } catch(e) {
                     dispatch(featureSelectorError('Search result broken (' + url + ":   " + filter + '): ' + e.message));
                 }
             }else {
-                dispatch(featuresLoaded(config.features, reqId, add));
-                updateHighlightedFeatures(state, config, dispatch);
+                dispatchFeaturesLoaded(reqId, add, max, state, config, dispatch);
             }
         }).catch((e) => {
-            dispatch(featureSelectorError("Error during wfs request " + e.statusText));
+            dispatch(featureSelectorError("Error during wfs request " + (e.statusText || e.message || e.code)));
         });
     };
 }

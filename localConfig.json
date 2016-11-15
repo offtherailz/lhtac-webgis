@@ -121,7 +121,8 @@
       					"buttonClassName": "square-button",
       					"singleSection": true,
                 "menuOptions": {
-                  "overlapMap": false
+                  "overlapMap": false,
+                  "width": 450
                 }
       				}
             },
@@ -330,9 +331,12 @@
                   "wrapWithPanel": false
               },
               "name": "Snapshot"
-            },
-            "FeatureSelector",
-            {
+            }, {
+              "name": "FeatureSelector",
+              "cfg": {
+                "maxSelectableFeatures": 1000
+              }
+            }, {
               "cfg": {
                   "btnConfig": {
                       "className": "square-button"

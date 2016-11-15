@@ -86,14 +86,16 @@ const WMSCrossSelector = createSelector([
         (state) => (state.queryform.spatialField),
         (state) => (state.map || {}),
         (state) => (state.mapInitialConfig || {}),
-        (state) => (state.areafilter)
+        (state) => (state.areafilter),
+        (state) => (state && state.queryform && state.queryform.simpleFilterFields)
         ],
-        (lhtacState, spatialField, mapConfig, mapInitialConfig, areafilter) => ({
+        (lhtacState, spatialField, mapConfig, mapInitialConfig, areafilter, filterFields) => ({
             activeLayer: lhtacState.activeLayer,
             toolbarEnabled: true,
             spatialField,
             mapConfig,
             mapInitialConfig,
+            filterFields,
             zoomArgs: areafilter.zoomArgs
         }));
 

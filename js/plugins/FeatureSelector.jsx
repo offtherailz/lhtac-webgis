@@ -34,6 +34,7 @@ const lhtac = require('../selectors/lhtac');
 
 const FeatureSelector = React.createClass({
     propTypes: {
+        maxSelectableFeatures: React.PropTypes.number,
         sidePanelExpanded: React.PropTypes.bool,
         bboxGlyph: React.PropTypes.string,
         polyGlyph: React.PropTypes.string,
@@ -114,13 +115,19 @@ const FeatureSelector = React.createClass({
                     geometry: nextProps.geometry
                 };
                 let filterOpt = {spatialField: newSpatialFilter};
+                if (this.props.maxSelectableFeatures) {
+                    filterOpt.pagination = {
+                            maxFeatures: this.props.maxSelectableFeatures,
+                            startIndex: 0
+                    };
+                }
 
                 filterOpt.crossLayerFilter = this.createCrossLayerFilterObj(spatialField.attribute, nextProps.queryform.spatialField);
                 if (this.props.advancedFilterStatus && this.props.queryform.simpleFilterFields && this.props.queryform.simpleFilterFields.length > 0) {
                     filterOpt.simpleFilterFields = this.props.queryform.simpleFilterFields;
                 }
                 let ogcFilter = FilterUtils.toOGCFilter(nextProps.activeLayer.name, filterOpt, "1.1.0");
-                this.props.loadFeatures(nextProps.queryform.searchUrl, ogcFilter, this.addKey);
+                this.props.loadFeatures(nextProps.queryform.searchUrl, ogcFilter, this.addKey, this.props.maxSelectableFeatures);
                 if (!this.addKey) {
                     // features selected and highlighted will be cleaned if the CTRL button is NOT pressed
                     this.props.changeHighlightStatus('disabled');
