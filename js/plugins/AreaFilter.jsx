@@ -24,7 +24,6 @@ const {
 } = require('../../MapStore2/web/client/actions/queryform');
 
 const {
-    createFilterConfig,
     setBaseCqlFilter
 } = require('../actions/advancedfilter');
 
@@ -87,15 +86,17 @@ const WMSCrossSelector = createSelector([
         (state) => (state.map || {}),
         (state) => (state.mapInitialConfig || {}),
         (state) => (state.areafilter),
-        (state) => (state && state.queryform && state.queryform.simpleFilterFields)
+        (state) => (state && state.queryform && state.queryform.simpleFilterFields),
+        (state) => (state && state.advancedfilter && state.advancedfilter.filterstatus)
         ],
-        (lhtacState, spatialField, mapConfig, mapInitialConfig, areafilter, filterFields) => ({
+        (lhtacState, spatialField, mapConfig, mapInitialConfig, areafilter, filterFields, filterStatus) => ({
             activeLayer: lhtacState.activeLayer,
             toolbarEnabled: true,
             spatialField,
             mapConfig,
             mapInitialConfig,
             filterFields,
+            filterStatus,
             zoomArgs: areafilter.zoomArgs
         }));
 
@@ -107,7 +108,6 @@ const WMSCrossLayerFilter = connect( WMSCrossSelector, (dispatch) => {
             onResetThisZone,
             changeZoomArgs,
             changeMapView,
-            createFilterConfig,
             setBaseCqlFilter
         }, dispatch)
     };

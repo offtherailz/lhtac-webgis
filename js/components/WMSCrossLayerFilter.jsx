@@ -15,6 +15,7 @@ const I18N = require('../../MapStore2/web/client/components/I18N/I18N');
 
 const mapUtils = require('../../MapStore2/web/client/utils/MapUtils');
 const CoordinatesUtils = require('../../MapStore2/web/client/utils/CoordinatesUtils');
+const FilterUtils = require('../../MapStore2/web/client/utils/FilterUtils');
 
 const LhtacFilterUtils = require('../utils/LhtacFilterUtils');
 const WMSCrossLayerFilter = React.createClass({
@@ -27,6 +28,7 @@ const WMSCrossLayerFilter = React.createClass({
         mapConfig: React.PropTypes.object,
         mapInitialConfig: React.PropTypes.object,
         filterFields: React.PropTypes.array,
+        filterStatus: React.PropTypes.bool,
         showGeneratedFilter: React.PropTypes.oneOfType([
             React.PropTypes.bool,
             React.PropTypes.string
@@ -48,7 +50,6 @@ const WMSCrossLayerFilter = React.createClass({
                 onReset: () => {},
                 onResetThisZone: () => {},
                 changeMapView: () => {},
-                createFilterConfig: () => {},
                 setBaseCqlFilter: () => {},
                 changeZoomArgs: () => {}
             }
@@ -115,20 +116,12 @@ const WMSCrossLayerFilter = React.createClass({
     search(props) {
 
         let filter = LhtacFilterUtils.getZoneCrossFilter(props.spatialField);
-
         if (filter) {
+            if (props.filterFields && props.filterStatus === true) {
+                filter += " AND " + FilterUtils.toCQLFilter({simpleFilterFields: props.filterFields});
+            }
             let params = assign({}, props.params, {cql_filter: filter});
             props.actions.onQuery(props.activeLayer, {params: params}, filter);
-
-            // ////////////////////////////////////////////////////////////////////
-            // WPS request to retrieve attribute values for the advanced filter
-            // ////////////////////////////////////////////////////////////////////
-            if (props.activeLayer && props.activeLayer.advancedFilter && !props.filterFields) {
-                props.activeLayer.advancedFilter.fieldsConfig.map((field) => {
-                    let wpsRequest = LhtacFilterUtils.getWpsRequest(props.activeLayer.name, props.activeLayer.advancedFilter.cql || filter, field.attribute);
-                    props.actions.createFilterConfig(wpsRequest, props.activeLayer.advancedFilter.searchUrl, field);
-                }, this);
-            }
 
             // Zoom to the selected geometry
             if (props.spatialField.extent && props.spatialField.extent) {
@@ -162,16 +155,26 @@ const WMSCrossLayerFilter = React.createClass({
     reset() {
         this.props.actions.changeZoomArgs(null);
         this.props.actions.onReset();
-        let params = assign(this.props.params, {cql_filter: "INCLUDE"});
-        this.props.actions.onQuery(this.props.activeLayer, {params: params}, "INCLUDE");
+        let filter;
+        if (this.props.filterFields && this.props.filterStatus === true) {
+            filter = FilterUtils.toCQLFilter({simpleFilterFields: this.props.filterFields});
+        } else {
+            filter = "INCLUDE";
+        }
+        this.props.actions.setBaseCqlFilter(filter);
         this.zoomToInitialExtent();
     },
     resetThisZone(zoneId, reload) {
         this.props.actions.onResetThisZone(zoneId, reload);
         if (reload) {
             this.props.actions.changeZoomArgs(null);
-            let params = assign(this.props.params, {cql_filter: "INCLUDE"});
-            this.props.actions.onQuery(this.props.activeLayer, {params: params}, "INCLUDE");
+            let filter;
+            if (this.props.filterFields && this.props.filterStatus === true) {
+                filter = FilterUtils.toCQLFilter({simpleFilterFields: this.props.filterFields});
+            } else {
+                filter = "INCLUDE";
+            }
+            this.props.actions.setBaseCqlFilter(filter);
             this.zoomToInitialExtent();
         }
     },

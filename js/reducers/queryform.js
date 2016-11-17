@@ -198,7 +198,7 @@ function queryform(state, action) {
 
         }
         case 'ADD_SIMPLE_FILTER_FIELD': {
-            let simpleFilterFields = state.simpleFilterFields || [];
+            let simpleFilterFields = state && state.simpleFilterFields || [];
             let newSimpleFilterFields;
             const field = ( action.properties.fieldId) ? action.properties : {...action.properties, fieldId: new Date().getUTCMilliseconds()};
             let idx = simpleFilterFields.findIndex((f) => (f.fieldId === field.fieldId));

@@ -19,7 +19,8 @@ const {
 } = require('../../MapStore2/web/client/actions/queryform');
 
 const {
-    toggleFilter
+    toggleFilter,
+    createFilterConfig
 } = require('../actions/advancedfilter');
 
 const {
@@ -46,7 +47,8 @@ const AdvancedFilterSelector = createSelector([
 const AdvancedFilter = connect(AdvancedFilterSelector, {
     simpleFilterFieldUpdate,
     changeLayerProperties: changeLhtacLayerFilter,
-    toggleFilter
+    toggleFilter,
+    createFilterConfig
 })(require('../components/AdvancedFilter'));
 
 module.exports = {

@@ -27,11 +27,14 @@ function valuesLoaded(reqId) {
         reqId
     };
 }
-function valuesLoadError(reqId, error) {
+function valuesLoadError(reqId, error, wpsParams, url, field) {
     return {
         type: VALUES_LOAD_ERROR,
         reqId,
-        error
+        error,
+        wpsParams,
+        url,
+        field
     };
 }
 function createSimpleFilterField(field, options, reqTime) {
@@ -68,12 +71,12 @@ function createSimpleFilterField(field, options, reqTime) {
     return addSimpleFilterField(fieldConf, reqTime);
 }
 
-function createFilterConfig(wpsPrams, url, filed) {
+function createFilterConfig(wpsParams, url, field) {
     const reqId = uuid.v1();
     return (dispatch) => {
         dispatch(newValuesRequst(reqId));
         let reqTime = new Date().getTime();
-        return axios.post(url, wpsPrams, {
+        return axios.post(url, wpsParams, {
             timeout: 20000,
             headers: {'Accept': 'application/json', 'Content-Type': 'text/plain'}
         }).then((response) => {
@@ -81,17 +84,17 @@ function createFilterConfig(wpsPrams, url, filed) {
             if (typeof config !== "object") {
                 try {
                     config = JSON.parse(config);
-                    dispatch(createSimpleFilterField(filed, config.values, reqTime));
+                    dispatch(createSimpleFilterField(field, config.values, reqTime));
                     dispatch(valuesLoaded(reqId));
                 } catch(e) {
                     dispatch(valuesLoadError(reqId, 'Failed Loading fields Values'));
                 }
             }else {
-                dispatch(createSimpleFilterField(filed, config.values));
+                dispatch(createSimpleFilterField(field, config.values, reqTime));
                 dispatch(valuesLoaded(reqId));
             }
         }).catch((e) => {
-            dispatch(valuesLoadError(reqId, "Error during wps request " + e.statusText));
+            dispatch(valuesLoadError(reqId, "Error during wps request value " + e.message), wpsParams, url, field);
         });
     };
 }
