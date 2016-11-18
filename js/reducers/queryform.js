@@ -99,8 +99,20 @@ function queryform(state, action) {
         }
         case TOGGLE_FILTER : {
             if (action.status === false) {
+                let resetValues = (field) => {
+                    if (field.optionsValues) {
+                        return field.optionsValues.map( v => "" + v);
+                    } else if (field.options) {
+                        return {
+                            lowBound: field.options.min,
+                            upBound: field.options.max
+                        };
+                    }
+
+                };
                 return {...state, simpleFilterFields: state.simpleFilterFields.map( (field) => {
-                    return {...field, values: field.optionsValues.map( v => "" + v)};
+
+                    return {...field, values: resetValues(field) };
                 })};
             }
             return state;
