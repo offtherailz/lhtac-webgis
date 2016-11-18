@@ -37,7 +37,7 @@ function queryform(state, action) {
             return queryFormConfig[action.layer.name];
         }
         case 'BASE_CQL_FILTER': {
-            return {...state, simpleFilterFields: []};
+            return {...state};
         }
         case 'ZONES_RESET': {
             return {...state, simpleFilterFields: [], spatialField: {...state.spatialField,

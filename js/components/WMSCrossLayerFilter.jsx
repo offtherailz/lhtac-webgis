@@ -26,6 +26,7 @@ const WMSCrossLayerFilter = React.createClass({
         toolbarEnabled: React.PropTypes.bool,
         mapConfig: React.PropTypes.object,
         mapInitialConfig: React.PropTypes.object,
+        filterFields: React.PropTypes.array,
         showGeneratedFilter: React.PropTypes.oneOfType([
             React.PropTypes.bool,
             React.PropTypes.string
@@ -122,7 +123,7 @@ const WMSCrossLayerFilter = React.createClass({
             // ////////////////////////////////////////////////////////////////////
             // WPS request to retrieve attribute values for the advanced filter
             // ////////////////////////////////////////////////////////////////////
-            if (props.activeLayer && props.activeLayer.advancedFilter) {
+            if (props.activeLayer && props.activeLayer.advancedFilter && !props.filterFields) {
                 props.activeLayer.advancedFilter.fieldsConfig.map((field) => {
                     let wpsRequest = LhtacFilterUtils.getWpsRequest(props.activeLayer.name, props.activeLayer.advancedFilter.cql || filter, field.attribute);
                     props.actions.createFilterConfig(wpsRequest, props.activeLayer.advancedFilter.searchUrl, field);

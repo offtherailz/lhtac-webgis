@@ -48,7 +48,7 @@
 				"title": "Districts",
 				"name": "lhtac:itd_districts",
 				"group": "Safety",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
 				"type": "wms",
@@ -58,7 +58,7 @@
 				"title": "Jurisdictions",
 				"name": "lhtac:jurisdictions2014",
 				"group": "Safety",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
         "type": "wms",
@@ -68,7 +68,7 @@
         "title": "Jurisdictions Labels",
         "name": "lhtac:juris_labels2014",
         "group": "Safety",
-        "format": "image/png"
+        "format": "image/png8"
       },
       {
 				"type": "wms",
@@ -79,7 +79,7 @@
 				"title": "Crash Locations",
 				"name": "lhtac:web2014all_mv",
 				"group": "Safety",
-				"format": "image/png",
+				"format": "image/png8",
         "fidAttributeName": "web2014all_mv_id",
         "legend": {
             "width": 20,
@@ -441,7 +441,7 @@
 				"title": "County",
 				"name": "lhtac:county",
 				"group": "Bridges",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
 				"type": "wms",
@@ -451,7 +451,7 @@
 				"title": "City",
 				"name": "lhtac:city",
 				"group": "Bridges",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
 				"type": "wms",
@@ -461,7 +461,7 @@
 				"title": "Road Jurisdiction",
 				"name": "lhtac:lhj2014",
 				"group": "Bridges",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
 				"type": "wms",
@@ -471,7 +471,7 @@
 				"title": "Legislative District",
 				"name": "lhtac:legislative_district",
 				"group": "Bridges",
-				"format": "image/png"
+				"format": "image/png8"
 			},
       {
 				"type": "wms",
@@ -482,7 +482,7 @@
 				"title": "Bridges",
 				"name": "lhtac:bridge2014all_mv",
 				"group": "Bridges",
-				"format": "image/png",
+				"format": "image/png8",
         "fidAttributeName": "bridge_num",
         "legend": {
             "width": 20,
