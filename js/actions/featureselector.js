@@ -52,7 +52,7 @@ function updateHighlightedFeatures(state, config, dispatch) {
         dispatch(updateHighlighted(newHighligthed, "update"));
     }
 }
-function dispatchFeaturesLimit(reqId, add, max, state, config, dispatch) {
+function checkFeatureLimit(reqId, add, max, state, config, dispatch) {
     if (config.totalFeatures && config.totalFeatures > max) {
         dispatch(featureSelectorError(`Too Many features selected (${config.totalFeatures}). Please select ${max} features or less`));
     } else {
@@ -73,13 +73,13 @@ function loadFeatures(url, filter, add, max) {
             if (typeof config !== "object") {
                 try {
                     config = JSON.parse(config);
-                    dispatchFeaturesLimit(reqId, add, max, state, config, dispatch);
+                    checkFeatureLimit(reqId, add, max, state, config, dispatch);
 
                 } catch(e) {
                     dispatch(featureSelectorError('Search result broken (' + url + ":   " + filter + '): ' + e.message));
                 }
             }else {
-                dispatchFeaturesLimit(reqId, add, max, state, config, dispatch);
+                checkFeatureLimit(reqId, add, max, state, config, dispatch);
             }
         }).catch((e) => {
             dispatch(featureSelectorError("Error during wfs request " + (e.statusText || e.message || e.code)));
