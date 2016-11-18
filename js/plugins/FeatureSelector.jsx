@@ -139,6 +139,9 @@ const FeatureSelector = React.createClass({
             }
             this.props.changeDrawingStatus("clean", '', 'featureselector', []);
         }
+        if ( this.props.open && !nextProps.open) {
+            this.props.changeDrawingStatus("clean", '', 'featureselector', []);
+        }
     },
     renderError() {
         return this.props.error ? (
