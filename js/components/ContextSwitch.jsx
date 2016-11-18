@@ -19,7 +19,7 @@ const ContextSwitch = React.createClass({
         mapInitialConfig: React.PropTypes.object,
         mapConfig: React.PropTypes.object,
         switchLayer: React.PropTypes.func,
-        resetZones: React.PropTypes.func,
+        resetAllFilters: React.PropTypes.func,
         changeMapView: React.PropTypes.func
     },
     getDefaultProps() {
@@ -31,7 +31,7 @@ const ContextSwitch = React.createClass({
             activeLayer: {},
             contextLayers: [],
             switchLayer: () => {},
-            resetZones: () => {},
+            resetAllFilters: () => {},
             changeMapView: () => {}
         };
     },
@@ -61,7 +61,7 @@ const ContextSwitch = React.createClass({
         );
     },
     changeContext(event, eventKey) {
-        this.props.resetZones();
+        this.props.resetAllFilters();
         this.props.switchLayer(this.props.contextLayers.filter((l) => {return l.id === eventKey; })[0]);
         this.zoomToInitialExtent();
     },

@@ -11,7 +11,7 @@ const {connect} = require('react-redux');
 const assign = require('object-assign');
 const {createSelector} = require('reselect');
 
-const {switchLayer} = require('../actions/lhtac');
+const {switchLayer, resetAllFilters} = require('../actions/lhtac');
 const {changeMapView} = require('../../MapStore2/web/client/actions/map');
 const {mapSelector} = require('../../MapStore2/web/client/selectors/map');
 
@@ -26,13 +26,10 @@ const selector = createSelector([
         contextLayers: l.contextLayers,
         mapInitialConfig,
         mapConfig }));
-const {
-    resetZones
-} = require('../../MapStore2/web/client/actions/queryform');
 
 const ContextSwitch = connect(selector, {
     switchLayer,
-    resetZones,
+    resetAllFilters,
     changeMapView
 })(require('../components/ContextSwitch'));
 

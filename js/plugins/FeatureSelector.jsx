@@ -107,7 +107,7 @@ const FeatureSelector = React.createClass({
             // prevGeometry is the area selected in the areaFilter and changes only over there
 
 
-            if (nextProps.queryform.spatialField.extent) {
+            if (nextProps.queryform.spatialField) {
                 let newSpatialFilter = {
                     attribute: spatialField.attribute,
                     method: nextProps.drawMethod,

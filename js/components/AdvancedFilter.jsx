@@ -9,6 +9,7 @@
 const React = require('react');
 const {PanelGroup, ButtonToolbar, Button, Glyphicon, Alert} = require('react-bootstrap');
 const FilterUtils = require('../../MapStore2/web/client/utils/FilterUtils');
+const LhtacFilterUtils = require('../utils/LhtacFilterUtils');
 const SimpleFilterField = require('../../MapStore2/web/client/components/data/query/SimpleFilterField');
 const Spinner = require('react-spinkit');
 
@@ -22,6 +23,7 @@ const AdvancedFilter = React.createClass({
         simpleFilterFieldUpdate: React.PropTypes.func,
         toggleFilter: React.PropTypes.func,
         changeLayerProperties: React.PropTypes.func,
+        createFilterConfig: React.PropTypes.func,
         activeLayer: React.PropTypes.object,
         error: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool, React.PropTypes.object])
     },
@@ -40,11 +42,18 @@ const AdvancedFilter = React.createClass({
             error: false,
             simpleFilterFieldUpdate: () => {},
             toggleFilter: () => {},
-            changeLayerProperties: () => {}
+            changeLayerProperties: () => {},
+            createFilterConfig: () => {}
         };
     },
+    componentDidMount() {
+        this.initializeFilters(this.props);
+    },
+    componentWillReceiveProps(props) {
+        this.initializeFilters(props);
+    },
     renderSimpleFilterFields() {
-        let fields = this.props.fieldsConfig.sort((a, b) => {
+        let fields = [...this.props.fieldsConfig].sort((a, b) => {
             return parseInt(a.fieldId, 10) - parseInt(b.fieldId, 10);
         });
         return fields.map((f) => {
@@ -86,12 +95,31 @@ const AdvancedFilter = React.createClass({
     render() {
         return (this.props.loading) ? this.renderLoading() : this.renderFields();
     },
+    shouldUpdateFilterFields(props) {
+        // active layer is present, advancedFilter has a fieldsConfig, it is not loading
+        // and the fieldsConfig are not loaded or the layer has changed
+        return props.activeLayer
+            && props.activeLayer.advancedFilter && props.activeLayer.advancedFilter.fieldsConfig
+            && !props.loading && ( props.fieldsConfig.length === 0 || props.activeLayer.id !== this.props.activeLayer.id );
+    },
+    initializeFilters(props) {
+        // ////////////////////////////////////////////////////////////////////
+        // WPS request to retrieve attribute values for the advanced filter
+        // ////////////////////////////////////////////////////////////////////
+        if (this.shouldUpdateFilterFields(props)) {
+            props.activeLayer.advancedFilter.fieldsConfig.map((field) => {
+                let wpsRequest = LhtacFilterUtils.getWpsRequest(props.activeLayer.name, props.activeLayer.advancedFilter.cql || "INCLUDE", field.attribute);
+                props.createFilterConfig(wpsRequest, props.activeLayer.advancedFilter.searchUrl, field);
+            });
+        }
+    },
     setFilter() {
-        let filter = this.props.baseCqlFilter + " AND " + FilterUtils.toCQLFilter({simpleFilterFields: this.props.fieldsConfig});
-        this.props.toggleFilter(true, filter);
-        let params = {...this.props.params, cql_filter: filter};
-        this.props.changeLayerProperties(this.props.activeLayer, {params: params}, this.props.baseCqlFilter);
-
+        if (this.props.fieldsConfig && this.props.fieldsConfig && this.props.fieldsConfig.length > 0) {
+            let filter = this.props.baseCqlFilter + " AND " + FilterUtils.toCQLFilter({simpleFilterFields: this.props.fieldsConfig});
+            this.props.toggleFilter(true, filter);
+            let params = {...this.props.params, cql_filter: filter};
+            this.props.changeLayerProperties(this.props.activeLayer, {params: params}, this.props.baseCqlFilter);
+        }
     },
     removeFilter() {
         this.props.toggleFilter(false);
