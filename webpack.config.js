@@ -39,6 +39,7 @@ module.exports = {
       }
     },
     module: {
+        noParse: [/html2canvas/],
         loaders: [
             { test: /\.css$/, loader: 'style!css'},
             { test: /\.less$/, loader: "style!css!less-loader" },
@@ -76,6 +77,6 @@ module.exports = {
         }]
     },
 
-    devtool: 'inline-source-map',
+    devtool: 'eval',
     debug: true
 };

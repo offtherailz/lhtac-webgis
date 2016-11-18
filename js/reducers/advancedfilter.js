@@ -13,6 +13,8 @@ const {
     TOGGLE_FILTER,
     BASE_CQL_FILTER
 } = require('../actions/advancedfilter');
+
+const RESET_ALL_FILTERS = require('../actions/lhtac');
 const {REMOVE_ALL_SIMPLE_FILTER_FIELDS} = require('../../MapStore2/web/client/actions/queryform');
 const initialState = {requests: [], error: false, filterstatus: false, baseCqlFilter: "INCLUDE" };
 
@@ -39,7 +41,7 @@ function advancedfilter(state = initialState, action) {
         case REMOVE_ALL_SIMPLE_FILTER_FIELDS: {
             return {...state, error: false};
         }
-        case 'ZONES_RESET': {
+        case RESET_ALL_FILTERS: {
             return {...state, error: false};
         }
         case 'ON_RESET_THIS_ZONE': {

@@ -16,6 +16,7 @@ const CLEAN_GEOMETRY = 'CLEAN_GEOMETRY';
 const CLEAN_ZONE = 'CLEAN_ZONE';
 const LOADING_SELECT_ALL = 'LOADING_SELECT_ALL';
 const ZONE_CHANGE = 'ZONE_CHANGE';
+const RESET_ALL_FILTERS = 'LHTAC_RESET_ALL_FILTERS';
 
 const {changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
 
@@ -220,6 +221,17 @@ function downloadSelectedFeatures(url, filter) {
     };
 }
 
+function resetAllFilters() {
+    return (dispatch) => {
+        dispatch({
+            type: 'ZONES_RESET'
+        });
+        dispatch({
+            type: RESET_ALL_FILTERS
+        });
+    };
+}
+
 module.exports = {
     SWITCH_LAYER,
     SET_ACTIVE_ZONE,
@@ -229,6 +241,8 @@ module.exports = {
     LOADING_SELECT_ALL,
     CLEAN_GEOMETRY,
     CLEAN_ZONE,
+    RESET_ALL_FILTERS,
+    resetAllFilters,
     cleanZone,
     clearAll,
     cleanGeometry,

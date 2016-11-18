@@ -14,6 +14,8 @@ const CLEAN_GEOMETRY = 'CLEAN_GEOMETRY';
 const CLEAN_ZONE = 'CLEAN_ZONE';
 const ZONE_CHANGE = 'ZONE_CHANGE';
 const ON_RESET_THIS_ZONE = 'ON_RESET_THIS_ZONE';
+const TOGGLE_FILTER = 'TOGGLE_FILTER';
+const RESET_ALL_FILTERS = require('../actions/lhtac');
 
 function shouldReset(aId, dId, zones) {
     let reset = false;
@@ -40,6 +42,34 @@ function queryform(state, action) {
             return {...state};
         }
         case 'ZONES_RESET': {
+            return {...state, spatialField: {...state.spatialField,
+                zoneFields: state.spatialField.zoneFields.map((field) => {
+                    let f = {
+                        ...field,
+                        value: null,
+                        open: false,
+                        error: null,
+                        active: false,
+                        checked: false
+                    };
+
+                    if (field.dependson) {
+                        return {
+                            ...f,
+                            disabled: true,
+                            open: false,
+                            value: null,
+                            dependson: {...field.dependson, value: null}
+                        };
+                    }
+
+                    return f;
+                }),
+                geometry: null,
+                buttonReset: true
+            }};
+        }
+        case RESET_ALL_FILTERS: {
             return {...state, simpleFilterFields: [], spatialField: {...state.spatialField,
                 zoneFields: state.spatialField.zoneFields.map((field) => {
                     let f = {
@@ -66,6 +96,14 @@ function queryform(state, action) {
                 geometry: null,
                 buttonReset: true
             }};
+        }
+        case TOGGLE_FILTER : {
+            if (action.status === false) {
+                return {...state, simpleFilterFields: state.simpleFilterFields.map( (field) => {
+                    return {...field, values: field.optionsValues.map( v => "" + v)};
+                })};
+            }
+            return state;
         }
         case ON_RESET_THIS_ZONE: {
             return {...state, spatialField: {...state.spatialField,
@@ -198,7 +236,7 @@ function queryform(state, action) {
 
         }
         case 'ADD_SIMPLE_FILTER_FIELD': {
-            let simpleFilterFields = state.simpleFilterFields || [];
+            let simpleFilterFields = state && state.simpleFilterFields || [];
             let newSimpleFilterFields;
             const field = ( action.properties.fieldId) ? action.properties : {...action.properties, fieldId: new Date().getUTCMilliseconds()};
             let idx = simpleFilterFields.findIndex((f) => (f.fieldId === field.fieldId));
