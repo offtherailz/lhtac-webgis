@@ -18,6 +18,7 @@
         "about_p5-1": "page.",
         "about_h21": "Credits",
         "about_p6": "MapStore2 is made by:",
+        "enable": "Enable",
         "layers": "Layers",
         "layerProperties": {
             "windowTitle": "Layer Properties",
@@ -27,8 +28,13 @@
             "general": "General",
             "display": "Display",
             "style": "Style",
+            "styleCustom": "Use style named \"{value}\"",
+            "styleListLoadError": "There was an error loading the styles list",
+            "stylesRefreshList": "Refresh Styles List",
             "format": "Format",
             "delete": "Delete",
+            "deleteLayer":"Delete Layer",
+            "deleteLayerMessage": "Do you really want to delete this Layer?",
             "confirmDelete": "Are you sure?"
         },
         "areafilter": "Select and customize an area filter",
@@ -53,7 +59,14 @@
         "opacity": "Opacity",
         "close": "Close",
         "cancel": "Cancel",
+        "confirm": "Confirm",
+        "confirmTitle": "Do you Confirm?",
         "pageInfo": "{total, plural, =0 {No items} =1 {{total} Item of {total}} other {Items {start}-{end} of {total}}}",
+        "loading": "Loading...",
+        "group": "Group",
+        "groups": "Groups",
+        "permission": "Permission",
+        "permissions": "Permissions",
         "home":{
             "open": "Open",
             "description": "MapStore 2 has been developed to create, save and share in a simple and intuitive way maps and mashups created selecting contents coming from well-known sources like Google Maps and OpenStreetMap or from services provided by organizations using open protocols like OGC WMS, WFS, WMTS or TMS and so on.<br/>Visit the <a href=\"http://geosolutions-it.github.io/MapStore2/\">home page</a> for more details.",
@@ -112,8 +125,13 @@
             "maps_title": "Maps",
             "locales_combo": "Language:"
         },
+        "newMap": "New Map",
+		"maps": {
+			"search": "search for maps..."
+		},
         "map": {
             "loading": "Loading...",
+            "loadingerror": "Error in loading",
             "name": "Name",
             "description": "Description",
             "namePlaceholder": "Map Name",
@@ -127,17 +145,29 @@
             "errorSize": "Max allowed size: 500kb",
             "error": "The provided image is not valid",
             "thumbnailError": {
-                "error403" : "You are not allowed to update the thumbnail",
-                "error404" : "An error occurred while creating the thumbnail",
-                "error409" : "A thumbnail with this name already exists",
-                "errorDefault" : "Network error"
+                "error403": "You are not allowed to update the thumbnail",
+                "error404": "An error occurred while creating the thumbnail",
+                "error409": "A thumbnail with this name already exists",
+                "errorDefault": "Network error"
             },
             "mapError": {
-                "error403" : "You are not allowed to update the map",
-                "error404" : "An error occurred while creating the map",
-                "error409" : "A map with this name already exists",
-                "errorDefault" : "Network error"
+                "error403": "You are not allowed to update the map",
+                "error404": "An error occurred while creating the map",
+                "error409": "A map with this name already exists",
+                "errorDefault": "Network error"
+            },
+            "permissions": {
+                "noRules": "No rules",
+                "addRule": "Add a rule...",
+                "selectGroup": "Select a group...",
+                "canView": "can view",
+                "canWrite": "can edit",
+                "noResult": "no results found",
+                "title": "Permissions Groups"
             }
+        },
+        "toc": {
+            "loadingerror": "The layer has not been loaded correctly"
         },
         "print":{
             "paneltitle": "Create PDF",
@@ -408,9 +438,13 @@
             "login": "Login",
             "logout": "Logout",
             "info": " Account Info",
+            "details": " User Details",
+            "noAttributesMessage": "There is no information related to your account",
             "changePwd": "Change Password",
             "newPwd": "New Password",
             "retypePwd": "Retype Password",
+            "passwordMinlenght": "Your password must be at least {minSize} character",
+            "passwordCheckFail": "Passwords do not match!",
             "username": "Username",
             "password": "Password",
             "signIn":"Sign-in",
@@ -419,6 +453,29 @@
                 "usernamePwdInsert": "Please insert username and password",
                 "usernamePwdIncorrect":"Username or password incorrect"
             }
+        },
+        "users": {
+            "title": "Manage Accounts",
+            "searchUsers": "search for users...",
+            "newUser": "New User",
+            "editUser": "Edit user",
+            "deleteUser": "Delete User",
+            "statusTitle": "status",
+            "enabled": "Enabled",
+            "groupTitle": "Groups:",
+            "roleTitle": "Role",
+            "saveUser": "Save",
+            "savingUser": "Saving...",
+            "userSaved": "Saved!",
+            "createUser": "Create",
+            "creatingUser": "Creating...",
+            "userCreated": "Created!",
+            "deleting": "Deleting...",
+            "delete": "Delete",
+            "confirmDeleteUser": "Are you sure you want to delete this user?",
+            "errorDelete": "There was an error deleting this user:",
+            "errorSaving": "There was an error saving the user:",
+            "selectedGroups": "SELECTED GROUPS"
         },
         "share":{
             "title": "Share",
@@ -440,18 +497,18 @@
             "layers": "Layers",
             "size": "Size",
             "notsupported": "Snapshot not supported",
-            "taintedMessage": "Save snapshot functionality is limited by some browser security rules. For better result right-click on the preview and select 'Save image as' (supported by Mozilla Firefox and Google Chrome)"
+            "taintedMessage": "Save snapshot functionality is limited by some browser security rules. For better result right-click on the preview and select 'Save image as' (supported by Firefox and Chrome)"
         },
         "shapefile": {
             "title": "Add Local Shapefile",
             "tooltip": "Add a local shapefile to the map.",
-            "placeholder": "Drop your file here or click to select shapefile to import.",
+            "placeholder": "Drop your files here or click to select the shapefiles to import. (shapefiles must be contained in zip archives)",
             "defaultStyle": "Default style",
             "zoom": "Zoom on the shapefiles",
             "error": {"select": "Select one or more zip file"},
             "add": "Add",
             "cancel": "Cancel",
-            "success" : " correctly imported"
+            "success": " correctly imported"
         },
         "catalog": {
             "title": "Catalog",
@@ -468,8 +525,10 @@
             "copied": "Copied!",
             "catalogUrlPlaceholder": "Enter catalog URL...",
             "textSearchPlaceholder": "text to search...",
-            "search": "Search"
-        },"uploader": {
+            "search": "Search",
+            "srs_not_allowed": "The map coordinate system is not supported by this service"
+        },
+        "uploader": {
             "filename": "File Name",
             "type": "Type",
             "lastModified": "Last Modified",
@@ -487,6 +546,16 @@
             "dropfile": "drop files here to create a new importing session",
             "dropfileImport": "drop here files to add it to this session",
             "process": "Session",
+            "number": "#",
+            "workspace": {
+                "create": "Create",
+                "createWS": "create a new workspace: ",
+                "target": "target workspace: ",
+                "failure": "Error creating workspace: {statusWS}",
+                "success": "Workspace {statusWS} successfully created",
+                "select": "Select TargetWorkspace",
+                "new": "New workspace name..."
+            },
             "import": {
                 "actions": "Actions",
                 "tasks": "Packages",
@@ -514,6 +583,7 @@
                 "transforms": "Trasformations Chain",
                 "update": "Update",
                 "run": "Import This Package",
+                "edit": "Edit Default Style",
                 "delete": "Delete This Package"
             },
             "transform": {
@@ -521,7 +591,8 @@
                 "type": "Transformation Type",
                 "actions": "Actions",
                 "options": "Transformation Options",
-                "overviewlevels": "Overview Levels"
+                "overviewlevels": "Overview Levels",
+                "delete": "Delete this transformation"
             }
         },
         "rasterstyler": {
@@ -540,10 +611,10 @@
             "applybtn": "Apply Style"
         },
         "bandselector": {
-            "band" : "Band",
-            "enhancement" : "Enhancement",
-            "algorithmTitle" : "Optional Algorithm",
-            "value" : "Value",
+            "band": "Band",
+            "enhancement": "Enhancement",
+            "algorithmTitle": "Optional Algorithm",
+            "value": "Value",
             "min": "Min",
             "max": "Max",
             "enha": {
@@ -587,7 +658,7 @@
             "pseudo": "PseudoColor",
             "multi": "Multi Band",
             "single": "Single Band"
-         },
+        },
         "featuregrid": {
             "header": "Search results list",
             "tools": "Tool Panel",
